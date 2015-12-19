@@ -5,8 +5,10 @@ require "linkshare_api/version"
 require File.expand_path("../linkshare_api/link_generator", __FILE__)
 require File.expand_path("../linkshare_api/deep_linking", __FILE__)
 require File.expand_path("../linkshare_api/product_search", __FILE__)
+require File.expand_path("../linkshare_api/advertiser_search", __FILE__)
 require File.expand_path("../linkshare_api/coupon_web_service", __FILE__)
 require File.expand_path("../linkshare_api/response", __FILE__)
+require File.expand_path("../linkshare_api/response/advertiser_search", __FILE__)
 
 # Errors
 require File.expand_path("../linkshare_api/errors/error", __FILE__)
@@ -22,17 +24,20 @@ module LinkshareAPI
     link_generator: "http://getdeeplink.linksynergy.com/createcustomlink.shtml",
     deep_linking: "http://click.linksynergy.com/deeplink",
     product_search: "http://productsearch.linksynergy.com/productsearch",
+    advertiser_search: "https://api.rakutenmarketing.com/advertisersearch/1.0",
     coupon_web_service: "http://couponfeed.linksynergy.com/coupon"
   }
 
   PARSE_RESULT = {
     link_generator: "item",
     product_search: "item",
+    advertiser_search: "merchant",
     coupon_web_service: "link"
   }
 
   RESULT = {
     product_search: "result",
+    advertiser_search: "result",
     coupon_web_service: "couponfeed"
   }
 
@@ -44,7 +49,7 @@ module LinkshareAPI
   @api_timeout  = 30
 
   class << self
-    attr_accessor :token, :affiliate_id, :logger
+    attr_accessor :token, :request_token, :affiliate_id, :logger
     attr_reader   :api_timeout
   end
 
@@ -78,5 +83,10 @@ module LinkshareAPI
   def self.coupon_web_service(options = {})
     coupon_web_service = LinkshareAPI::CouponWebService.new
     coupon_web_service.query(options)
+  end
+
+  def self.advertiser_search(options = {})
+    advertiser_search = LinkshareAPI::AdvertiserSearch.new
+    advertiser_search.query(options)
   end
 end

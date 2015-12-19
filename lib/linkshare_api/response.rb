@@ -31,7 +31,7 @@ module LinkshareAPI
       @data
     end
 
-    private
+    protected
 
     def parse(raw_data)
       data = []
